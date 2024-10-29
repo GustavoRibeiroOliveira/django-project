@@ -1,0 +1,28 @@
+# docker-compose -f docker-compose.dev.yml build
+# Comando para dar up no docker, -f serve para nome customizado do docker-compose
+# docker-compose -f docker-compose.dev.yml up
+# -d serve para deixar rodando o servidor mas n travar o terminal
+# docker-compose -f docker-compose.dev.yml up -d
+# docker-compose -f docker-compose.dev.yml down
+
+
+services:
+  sidia_db:
+    image: bitnami/postgresql:latest
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: sidia
+    ports:
+#      Tudo que chegar na porta 5433, será redirecionado para 5432
+      - "5433:5432"
+    volumes:
+#      Realiza o backup dos arquivos do banco na parta postgres-data
+      - postgres-data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    ports:
+      - 8081:8080
+
+volumes:
+  postgres-data:

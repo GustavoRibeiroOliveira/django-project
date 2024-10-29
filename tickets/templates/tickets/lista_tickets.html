@@ -1,0 +1,96 @@
+{% extends 'base.html'%}
+{% load render_table from django_tables2 %}
+
+{% block conteudo %}
+
+<h1>Tickets</h1>
+
+<p>
+    <a class="btn btn-primary" href="{% url 'nova-solicitacao-ticket' %}">Novo Ticket</a>
+</p>
+<div>
+    {% render_table table %}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="respostaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enviar resposta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="mensagem">Digite a sua mensagem.</label>
+                        <textarea class="form-control" name="mensagem" id="mensagem" rows="3"></textarea>
+                        <input type="hidden" name="id" id="id" value="">
+                        <input type="hidden" name="tipo" id="tipo" value="resposta">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="finalizarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cancelar/Finalizar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <select name="operacao" class="form-control">
+                        <option value="c">Cancelar</option>
+                        <option value="f">Finalizar</option>
+                    </select>
+                    <div class="form-group">
+                        <label for="motivo">Digite o motivo.</label>
+                        <textarea class="form-control" name="mensagem" id="motivo" rows="3"></textarea>
+                        <input type="hidden" name="id" id="id" value="">
+                        <input type="hidden" name="tipo" id="tipo" value="finalizar">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#respostaModal').on('show.bs.modal', function (e) {
+
+        //get data-id attribute of the clicked element
+        var ticketId = $(e.relatedTarget).data('id');
+
+        //populate the textbox
+        $(e.currentTarget).find('input[name="id"]').val(ticketId);
+    });
+    $('#finalizarModal').on('show.bs.modal', function (e) {
+
+        //get data-id attribute of the clicked element
+        var ticketId = $(e.relatedTarget).data('id');
+
+        //populate the textbox
+        $(e.currentTarget).find('input[name="id"]').val(ticketId);
+    });
+</script>
+
+{% endblock %}
